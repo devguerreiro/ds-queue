@@ -1,0 +1,7 @@
+{
+  "name": "ds-queue",
+  "version": "1.0.0",
+  "main": "index.js",
+  "author": "Luis Guerreiro <luiscvlh11@gmail.com>",
+  "license": "MIT"
+}
