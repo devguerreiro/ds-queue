@@ -1,35 +1,60 @@
 import assert from "assert";
 
-import LinkedList from "./LinkedList";
+class Node {
+    value: number;
+    next: Node | null = null;
 
-namespace NSQueue {
-    export class Queue {
-        queue = new LinkedList();
-
-        add(value: number) {
-            this.queue.add(value);
-        }
-
-        pop() {
-            const value = this.queue.get(0);
-            if (this.queue.remove(value)) {
-                return value;
-            }
-        }
-
-        get length(): number {
-            return this.queue.length;
-        }
+    constructor(value: number) {
+        this.value = value;
     }
 }
 
-const queue = new NSQueue.Queue();
+class Queue {
+    private first: Node | null = null;
+    private last: Node | null = null;
+    private size: number = 0;
 
-assert.throws(() => queue.pop(), Error);
+    push(value: number) {
+        const newNode = new Node(value);
+        if (this.size === 0) {
+            this.first = newNode;
+            this.last = newNode;
+        } else {
+            (this.last as Node).next = newNode;
+            this.last = newNode;
+        }
+        this.size++;
+    }
 
-queue.add(10);
-queue.add(20);
-queue.add(30);
+    pop() {
+        if (this.size > 0) {
+            const first = this.first as Node;
+            this.first = (this.first as Node).next;
+            first.next = null;
+            this.size--;
+            return first.value;
+        }
+        throw new RangeError();
+    }
+
+    peek() {
+        return this.first?.value;
+    }
+
+    get length(): number {
+        return this.size;
+    }
+}
+
+const queue = new Queue();
+
+assert.throws(() => queue.pop(), RangeError);
+
+queue.push(10);
+queue.push(20);
+queue.push(30);
+
+assert.equal(queue.peek(), 10);
 
 assert.equal(queue.length, 3);
 
