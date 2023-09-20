@@ -1,19 +1,45 @@
-from linked_list import LinkedList
+from typing import TypeVar
+
+TNode = TypeVar("TNode", bound="Node")
+
+
+class Node:
+    value: int
+    next: TNode | None = None
+
+    def __init__(self, value: int):
+        self.value = value
 
 
 class Queue:
-    linked_list: LinkedList = LinkedList()
+    _first: Node | None = None
+    _last: Node | None = None
+    _size: int = 0
 
-    def __len__(self):
-        return len(self.linked_list)
-
-    def add(self, value: int):
-        self.linked_list.add(value)
+    def push(self, value: int):
+        new_node = Node(value)
+        if self._size == 0:
+            self._first = new_node
+            self._last = new_node
+        else:
+            self._last.next = new_node
+            self._last = new_node
+        self._size += 1
 
     def pop(self):
-        value = self.linked_list[0]
-        if self.linked_list.remove(value):
-            return value
+        if self._size > 0:
+            first = self._first
+            self._first = first.next
+            first.next = None
+            self._size -= 1
+            return first.value
+        raise IndexError()
+
+    def peek(self):
+        return self._first.value
+
+    def __len__(self):
+        return self._size
 
 
 if __name__ == "__main__":
@@ -25,9 +51,11 @@ if __name__ == "__main__":
     except IndexError as e:
         assert isinstance(e, IndexError)
 
-    queue.add(10)
-    queue.add(20)
-    queue.add(30)
+    queue.push(10)
+    queue.push(20)
+    queue.push(30)
+
+    assert queue.peek() == 10
 
     assert len(queue) == 3
 
