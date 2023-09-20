@@ -1,10 +1,10 @@
 import assert from "assert";
 
-import { NSLinkedList } from "./LinkedList";
+import LinkedList from "./LinkedList";
 
 namespace NSQueue {
     export class Queue {
-        queue = new NSLinkedList.LinkedList();
+        queue = new LinkedList();
 
         add(value: number) {
             this.queue.add(value);
